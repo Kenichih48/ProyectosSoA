@@ -2,13 +2,9 @@ namespace MyService.Data
 {
     public class AnswerAdapter
     {
-        private APIDbContext apiDBContext;
-        private Random random = new Random();
-        public AnswerAdapterData(APIDbContext apiDBContext)
+        public AnswerAdapter()
         {
-            this.apiDBContext = apiDBContext;
         }
-    
         public async Task<string> RetrieveDataFromDatabase()
         {
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE DATABASE
