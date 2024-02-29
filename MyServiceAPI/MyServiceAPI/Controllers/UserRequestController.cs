@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyService.Data;
+using System;
 
 namespace MyServiceAPI.Controllers
 {
@@ -16,6 +17,7 @@ namespace MyServiceAPI.Controllers
         public string GetFullMeal(string Id)
         {
             string response = ProcessKey(Id, "", "");
+            
             return response;
         }
 
@@ -24,7 +26,7 @@ namespace MyServiceAPI.Controllers
         public string GetDessert(string Id, string comida, string tipo)
         {
             string response = ProcessKey(Id, comida, tipo);
-            return "1";
+            return response;
         }
 
         [HttpGet]
@@ -32,7 +34,7 @@ namespace MyServiceAPI.Controllers
         public string GetLunch(string Id, string comida, string tipo)
         {
             string response = ProcessKey(Id, comida, tipo);
-            return "1";
+            return response;
         }
 
         [HttpGet]
@@ -40,7 +42,7 @@ namespace MyServiceAPI.Controllers
         public string GetDrink(string Id, string comida, string tipo)
         {
             string response = ProcessKey(Id, comida, tipo);
-            return "1";
+            return response;
         }
 
         private string ProcessKey(string key, string comida, string tipo)

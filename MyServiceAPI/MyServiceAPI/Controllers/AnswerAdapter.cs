@@ -2,6 +2,8 @@ using MyServiceAPI.Controllers;
 
 namespace MyService.Data
 {
+    //Convierte las respuestas (dattapull, openai, endpoint) a un json de nuestra api.
+    // header, body and status
     public class AnswerAdapter
     {   
 
@@ -19,9 +21,14 @@ namespace MyService.Data
             {
                 jsonData = databaseController.SearchFullMeal();
             }
-            Console.WriteLine(jsonData);
+            
+            //add status and extra 
+
+
             return jsonData;
         }
+
+
         public async Task<string> RetrieveDataFromOpenAIAPI()
         {
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE OPENAI API

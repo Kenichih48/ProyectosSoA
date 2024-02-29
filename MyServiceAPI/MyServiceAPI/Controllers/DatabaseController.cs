@@ -39,21 +39,33 @@ namespace MyServiceAPI.Controllers
             // Deserialize the menu object into Menu class
             Menu randomMenu = randomMenuObject.ToObject<Menu>();
 
-            return JsonConvert.SerializeObject(randomMenu);
+
+            string jsonMenu = JsonConvert.SerializeObject(randomMenu);
+
+
+            return jsonMenu;
         }
 
 
-        public string SearchDessert(string comida, string tipo)
+        public (string,string) SearchDessert(string comida, string tipo)
         {
-            return "";
+            // Read the JSON file
+            string jsonText = File.ReadAllText(filePath);
+
+            // Parse the JSON array
+            JArray menusArray = JArray.Parse(jsonText);
+
+            // Get a random index
+            int randomIndex = random.Next(0, menusArray.Count);
+            return ("", "");
         }
-        public string SearchLunch(string comida, string tipo)
+        public (string, string) SearchLunch(string comida, string tipo)
         {
-            return "";
+            return ("","");
         }
-        public string SearchDrink(string comida, string tipo)
+        public (string, string) SearchDrink(string comida, string tipo)
         {
-            return "";
+            return ("", "");
         }
     }
 }
