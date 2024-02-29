@@ -23,9 +23,18 @@ namespace MyService.Data
             }
             
             //add status and extra 
+            var response = new
+            {
+                status_code = 200,
+                status = "success",
+                data = jsonData
+            };
+
+            string jsonResponse = JsonConvert.SerializePbject(response, Formatting.Indented);
 
 
-            return jsonData;
+
+            return jsonResponse;
         }
 
 
