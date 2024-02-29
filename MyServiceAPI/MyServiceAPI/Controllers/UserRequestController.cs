@@ -14,9 +14,9 @@ namespace MyServiceAPI.Controllers
 
         [HttpGet]
         [Route("GetFullMeal")]
-        public string GetFullMeal(string Id)
+        public string GetFullMeal(string Id, string comida, string tipo)
         {
-            string response = ProcessKey(Id, "", "");
+            string response = ProcessKey(Id, comida,tipo );
             
             return response;
         }
