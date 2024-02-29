@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MyServiceAPI.Configurations;
 using MyServiceAPI.Services;
@@ -7,19 +8,22 @@ namespace MyServiceAPI.Controllers
 {
     [ApiController]
     [Route("MyService")]
-    public class OpenAIController
+    public class OpenAIController: ControllerBase
     {
         private readonly InterfaceOpenAIService _openAIService;
 
-
+        public OpenAIController(
+        InterfaceOpenAIService openAIService
+        ){
+        _openAIService = openAIService;
+        }
 
         [HttpGet]
         [Route("Test")]
-        public string testMethod(string text)
+        public async Task<IActionResult> testMethod(string text)
         {
-            string result = "Hola";
-
-            return result;
+            var result = await _openAIService.getFoodRecomendations(text);
+            return Ok(result);
         }
     }
 }
