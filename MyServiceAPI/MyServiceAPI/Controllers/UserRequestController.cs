@@ -9,8 +9,7 @@ namespace MyServiceAPI.Controllers
     public class UserRequestController
     {
         
-
-        public AnswerAdapter answeradapter = new AnswerAdapter();
+        public AnswerAdapter answeradapter = new AnswerAdapter("DataBase.json");
 
         [HttpGet]
         [Route("GetFullMeal")]
@@ -50,7 +49,7 @@ namespace MyServiceAPI.Controllers
             string response = "";
             if (key == "0")
             {
-                response = answeradapter.RetrieveDataFromDatabase(tipo, comida);
+                response = answeradapter.RetrieveDataFromDatabase(comida, tipo);
             }
             else if (key == "1")
             {
