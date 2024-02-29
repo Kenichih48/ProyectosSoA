@@ -59,7 +59,7 @@ namespace MyServiceAPI.Controllers
             int randomIndex = random.Next(0, menusArray.Count);
             return ("", "");
         }
-        public (string, string) SearchLunch(string comida, string tipo)
+        public (string, string) SearchDish(string comida, string tipo)
         {
             return ("","");
         }

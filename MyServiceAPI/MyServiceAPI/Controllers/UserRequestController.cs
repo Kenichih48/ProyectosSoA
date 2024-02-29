@@ -30,8 +30,8 @@ namespace MyServiceAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetLunch")]
-        public string GetLunch(string Id, string comida, string tipo)
+        [Route("GetDish")]
+        public string GetDish(string Id, string comida, string tipo)
         {
             string response = ProcessKey(Id, comida, tipo);
             return response;

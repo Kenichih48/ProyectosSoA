@@ -14,6 +14,10 @@ builder.Services.AddScoped<InterfaceOpenAIService, OpenAIService>();
 
 var app = builder.Build();
 
+
+
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

@@ -18,10 +18,9 @@ namespace MyService.Data
             // jsonData = await AnswerAdapterData.GetData();
             string jsonData = "";
 
-            if(tipo == "" && comida == "")
-            {
-                jsonData = databaseController.SearchFullMeal();
-            }
+            
+            jsonData = databaseController.SearchFullMeal();
+            
             
             //add status and extra 
             var response = new
