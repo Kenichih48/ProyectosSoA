@@ -10,6 +10,7 @@ namespace MyService.Data
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE DATABASE
             // jsonData = await AnswerAdapterData.GetData();
 
+
             return jsonData;
         }
         public async Task<string> RetrieveDataFromOpenAIAPI()
@@ -57,5 +58,6 @@ namespace MyService.Data
             // LOGIC TO TRANSFORM ANY GIVEN DATA TO OUR NEEDED ANSWER FORMAT
             return jsonData;
         }
+        public string 
     }
 }
