@@ -15,7 +15,7 @@ namespace MyServiceAPI.Controllers
         [Route("GetFullMeal")]
         public string GetFullMeal(string Id, string comida, string tipo)
         {
-            string response = ProcessKey(Id, comida,tipo );
+            string response = ProcessKey(Id, comida, tipo, "0");
             
             return response;
         }
@@ -24,7 +24,7 @@ namespace MyServiceAPI.Controllers
         [Route("GetDessert")]
         public string GetDessert(string Id, string comida, string tipo)
         {
-            string response = ProcessKey(Id, comida, tipo);
+            string response = ProcessKey(Id, comida, tipo, "1");
             return response;
         }
 
@@ -32,7 +32,7 @@ namespace MyServiceAPI.Controllers
         [Route("GetDish")]
         public string GetDish(string Id, string comida, string tipo)
         {
-            string response = ProcessKey(Id, comida, tipo);
+            string response = ProcessKey(Id, comida, tipo, "2");
             return response;
         }
 
@@ -40,16 +40,16 @@ namespace MyServiceAPI.Controllers
         [Route("GetDrink")]
         public string GetDrink(string Id, string comida, string tipo)
         {
-            string response = ProcessKey(Id, comida, tipo);
+            string response = ProcessKey(Id, comida, tipo, "3");
             return response;
         }
 
-        private string ProcessKey(string key, string comida, string tipo)
+        private string ProcessKey(string key, string comida, string tipo, string request)
         {
             string response = "";
             if (key == "0")
             {
-                response = answeradapter.RetrieveDataFromDatabase(comida, tipo);
+                response = answeradapter.RetrieveDataFromDatabase(comida, tipo, request);
             }
             else if (key == "1")
             {

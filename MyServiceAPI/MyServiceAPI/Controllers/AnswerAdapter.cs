@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using MyServiceAPI.Controllers;
 using Newtonsoft.Json;
 
@@ -23,14 +24,27 @@ namespace MyService.Data
         /// If the requested menu item is found in the database, returns a success response
         /// containing the associated data (dish, drink, dessert).
         /// If the requested menu item does not exist, returns an error response.</returns>
-        public string RetrieveDataFromDatabase(string comida, string tipo)
+        public string RetrieveDataFromDatabase(string comida, string tipo, string request)
         {
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE DATABASE
             // jsonData = await AnswerAdapterData.GetData();
+            string? menuItemJson = null;
 
-            string menuItemJson = databaseController.SearchFullMeal(comida, tipo);
+            if (request == "0")
+            {
+                menuItemJson = databaseController.SearchFullMeal(comida, tipo);
+            }
+            else if(request == "1" || request == "2" || request == "3")
+            {
+                menuItemJson = databaseController.SearchSingle(comida, tipo, request);
+            }
+            else
+            {
+                // Invalid request
+                return JsonConvert.SerializeObject(GenerateErrorResponse("Invalid request"), Formatting.Indented);
+            }
 
-            var response = menuItemJson != null ? GenerateSuccessResponse(menuItemJson) : GenerateErrorResponse();
+            var response = menuItemJson != null ? GenerateSuccessResponse(menuItemJson) : GenerateErrorResponse("Requested menu item does not exist");
 
             return JsonConvert.SerializeObject(response, Formatting.Indented);
         }
@@ -93,26 +107,31 @@ namespace MyService.Data
         {
             var jsonData = JsonConvert.DeserializeObject(input);
 
-            return new
+            var response = new
             {
                 status_code = 200,
                 status = "success",
                 data = jsonData
             };
+
+            return response;
         }
 
         /// <summary>
         /// Generates an error response object indicating that the requested menu item does not exist.
         /// </summary>
         /// <returns>An error response object indicating that the requested menu item does not exist.</returns>
-        private object GenerateErrorResponse()
+        private object GenerateErrorResponse(string input)
         {
-            return new
+            // Construct the error response object
+            var response = new
             {
                 status_code = 512,
                 status = "error",
-                message = "Requested menu item does not exist"
+                message = input
             };
+
+            return response;
         }
 
     }
