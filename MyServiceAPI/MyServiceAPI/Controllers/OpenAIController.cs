@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using MyServiceAPI.Configurations;
+using MyServiceAPI.Services;
 
 namespace MyServiceAPI.Controllers
 {
@@ -6,14 +9,17 @@ namespace MyServiceAPI.Controllers
     [Route("MyService")]
     public class OpenAIController
     {
+        private readonly InterfaceOpenAIService _openAIService;
+
+
 
         [HttpGet]
         [Route("Test")]
-        public string test(string promt)
+        public string testMethod(string text)
         {
+            string result = "Hola";
 
-            
-
+            return result;
         }
     }
 }
