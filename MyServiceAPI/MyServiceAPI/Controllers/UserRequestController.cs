@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyService.Data;
 
 namespace MyServiceAPI.Controllers
 {
@@ -6,13 +7,16 @@ namespace MyServiceAPI.Controllers
     [Route("MyService")]
     public class UserRequestController
     {
-        //public KeyCheck keycheck = new KeyCheck();
+        
+
+        public AnswerAdapter answeradapter = new AnswerAdapter();
+
         [HttpGet]
         [Route("GetFullMeal")]
-        public string GetFullMeal(string Id, string comida, string tipo)
+        public string GetFullMeal(string Id)
         {
-            string response = ProcessKey(Id, comida, tipo);
-            return "1";
+            string response = ProcessKey(Id, "", "");
+            return response;
         }
 
         [HttpGet]
@@ -44,7 +48,7 @@ namespace MyServiceAPI.Controllers
             string response = "";
             if (key == "0")
             {
-                //response = Datapull
+                response = answeradapter.RetrieveDataFromDatabase(tipo, comida);
             }
             else if (key == "1")
             {

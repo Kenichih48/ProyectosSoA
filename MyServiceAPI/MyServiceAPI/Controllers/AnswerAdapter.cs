@@ -1,16 +1,25 @@
+using MyServiceAPI.Controllers;
+
 namespace MyService.Data
 {
     public class AnswerAdapter
-    {
+    {   
+
+        DatabaseController databaseController = new DatabaseController();
         public AnswerAdapter()
         {
         }
-        public async Task<string> RetrieveDataFromDatabase()
+        public string RetrieveDataFromDatabase(string tipo, string comida)
         {
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE DATABASE
             // jsonData = await AnswerAdapterData.GetData();
+            string jsonData = "";
 
-
+            if(tipo == "" && comida == "")
+            {
+                jsonData = databaseController.SearchFullMeal();
+            }
+            Console.WriteLine(jsonData);
             return jsonData;
         }
         public async Task<string> RetrieveDataFromOpenAIAPI()
@@ -18,7 +27,7 @@ namespace MyService.Data
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE OPENAI API
             //var response = await httpClient.GetAsync(openAIApiEndpoint);
             //var jsonData = await response.Content.ReadAsStringAsync();
-
+            string jsonData = "";
             return jsonData;
         }
         public async Task<string> RetrieveDataFromExternalEndPoint()
@@ -26,18 +35,20 @@ namespace MyService.Data
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE EXTERNALENDPOINTAPI
             // var response = await httpClient.GetAsync(externalEndPointApiEndpoint);
             // var jsonData = await response.Content.ReadAsStringAsync();
-
+            string jsonData = "";
             return jsonData;
         }
-        public string AdaptAnswerToDesiredFormat(string source)
+
+        /*
+        public string AdaptAnswerToDesiredFormat(string source, string comida, string tipo)
         {
             string jsonData = "";
 
-            switch (source.ToLower())
+            switch (source)
             {
                 case "database":
                     // Retrieve data from the database
-                    jsonData = RetrieveDataFromDatabase().Result;
+                    jsonData = RetrieveDataFromDatabase();
                     break;
                 case "openai":
                     // Retrieve data from the OpenAI API
@@ -53,11 +64,12 @@ namespace MyService.Data
 
             return TransformJsonToDesiredFormat(jsonData);
         }
+        */
         private string TransformJsonToDesiredFormat(string jsonData)
         {
             // LOGIC TO TRANSFORM ANY GIVEN DATA TO OUR NEEDED ANSWER FORMAT
             return jsonData;
         }
-        public string 
+        
     }
 }
