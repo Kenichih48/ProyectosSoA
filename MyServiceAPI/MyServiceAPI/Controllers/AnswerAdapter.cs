@@ -1,4 +1,5 @@
 using MyServiceAPI.Controllers;
+using Newtonsoft.Json;
 
 namespace MyService.Data
 {
@@ -30,7 +31,7 @@ namespace MyService.Data
                 data = jsonData
             };
 
-            string jsonResponse = JsonConvert.SerializePbject(response, Formatting.Indented);
+            string jsonResponse = JsonConvert.SerializeObject(response, Formatting.Indented);
 
 
 
