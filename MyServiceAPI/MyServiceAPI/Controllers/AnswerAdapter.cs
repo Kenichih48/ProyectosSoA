@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using MyServiceAPI.Controllers;
+using MyServiceAPI.Services;
 using Newtonsoft.Json;
 
 namespace MyService.Data
@@ -10,10 +11,13 @@ namespace MyService.Data
     {
         private readonly string filePath;
         private readonly DatabaseController databaseController;
-        public AnswerAdapter(string filePath)
+        private readonly InterfaceOpenAIService _openAIService;
+
+        public AnswerAdapter(string filePath,InterfaceOpenAIService openAIService)
         {
             this.filePath = filePath;
             this.databaseController = new DatabaseController(filePath);
+            _openAIService = openAIService;
         }
         /// <summary>
         /// Retrieves data from the database based on the provided food and type.
@@ -49,13 +53,36 @@ namespace MyService.Data
             return JsonConvert.SerializeObject(response, Formatting.Indented);
         }
 
-        public async Task<string> RetrieveDataFromOpenAIAPI()
+        public async Task<string> RetrieveDataFromOpenAIAPI(string comida, string tipo, string request)
         {
-            // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE OPENAI API
-            //var response = await httpClient.GetAsync(openAIApiEndpoint);
-            //var jsonData = await response.Content.ReadAsStringAsync();
-            string jsonData = "";
-            return jsonData;
+            string? response = null;
+            
+            if (request == "0")
+            {
+                response = await _openAIService.getFoodRecomendations(tipo+":"+comida);
+            }
+            else if (request == "1" )
+            {
+                response = await _openAIService.getFoodRecomendations(tipo + ":" + comida+ " I only want the dessert");
+            }
+            else if (request == "2" )
+            {
+                response = await _openAIService.getFoodRecomendations(tipo + ":" + comida + " I only want the dish");
+            }
+            else if (request == "3")
+            {
+                response = await _openAIService.getFoodRecomendations(tipo + ":" + comida + " I only want the drink");
+            }
+            else
+            {
+                // Invalid request
+                return JsonConvert.SerializeObject(GenerateErrorResponse("Invalid request"), Formatting.Indented);
+            }
+
+            var finalresponse = response != null ? GenerateSuccessResponse(response) : GenerateErrorAIResponse("Error With OpenAI request");
+
+            return JsonConvert.SerializeObject(finalresponse, Formatting.Indented);
+            
         }
         public async Task<string> RetrieveDataFromExternalEndPoint()
         {
@@ -66,32 +93,7 @@ namespace MyService.Data
             return jsonData;
         }
 
-        /*
-        public string AdaptAnswerToDesiredFormat(string source, string comida, string tipo)
-        {
-            string jsonData = "";
-
-            switch (source)
-            {
-                case "database":
-                    // Retrieve data from the database
-                    jsonData = RetrieveDataFromDatabase();
-                    break;
-                case "openai":
-                    // Retrieve data from the OpenAI API
-                    jsonData = RetrieveDataFromOpenAIAPI().Result;
-                    break;
-                case "externalep":
-                    // Retrieve data from the ExternalEndPoint API
-                    jsonData = RetrieveDataFromExternalEndPoint().Result;
-                    break;
-                default:
-                    throw new ArgumentException("Invalid data source provided.");
-            }
-
-            return TransformJsonToDesiredFormat(jsonData);
-        }
-        */
+        
         private string TransformJsonToDesiredFormat(string jsonData)
         {
             // LOGIC TO TRANSFORM ANY GIVEN DATA TO OUR NEEDED ANSWER FORMAT
@@ -127,6 +129,19 @@ namespace MyService.Data
             var response = new
             {
                 status_code = 512,
+                status = "error",
+                message = input
+            };
+
+            return response;
+        }
+
+        private object GenerateErrorAIResponse(string input)
+        {
+            // Construct the error response object
+            var response = new
+            {
+                status_code = 513,
                 status = "error",
                 message = input
             };

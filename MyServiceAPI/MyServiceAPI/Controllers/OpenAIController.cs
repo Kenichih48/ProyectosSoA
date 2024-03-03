@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MyServiceAPI.Configurations;
 using MyServiceAPI.Services;
-
+/*
 namespace MyServiceAPI.Controllers
 {
     [ApiController]
@@ -12,10 +12,8 @@ namespace MyServiceAPI.Controllers
     {
         private readonly InterfaceOpenAIService _openAIService;
 
-        public OpenAIController(
-        InterfaceOpenAIService openAIService
-        ){
-        _openAIService = openAIService;
+        public OpenAIController(InterfaceOpenAIService openAIService){
+            _openAIService = openAIService;
         }
 
         [HttpGet]
@@ -27,3 +25,4 @@ namespace MyServiceAPI.Controllers
         }
     }
 }
+*/

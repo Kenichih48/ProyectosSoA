@@ -1,15 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyService.Data;
+using MyServiceAPI.Services;
 using System;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace MyServiceAPI.Controllers
 {
     [ApiController]
-    [Route("MyService")]
+    
     public class UserRequestController
     {
-        
-        public AnswerAdapter answeradapter = new AnswerAdapter("DataBase.json");
+        private readonly InterfaceOpenAIService _openAIService;
+        public AnswerAdapter answeradapter;
+
+        public UserRequestController(InterfaceOpenAIService openAIService)
+        {
+            _openAIService = openAIService;
+            answeradapter = new AnswerAdapter("DataBase.json",openAIService);
+        }
+
 
         [HttpGet]
         [Route("GetFullMeal")]
@@ -53,7 +62,7 @@ namespace MyServiceAPI.Controllers
             }
             else if (key == "1")
             {
-                //response = AIAdapter
+                response = answeradapter.RetrieveDataFromOpenAIAPI(comida, tipo, request).Result;
             }
             else if (key == "2")
             {
