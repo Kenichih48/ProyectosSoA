@@ -28,7 +28,7 @@ namespace MyService.Data
         /// If the requested menu item is found in the database, returns a success response
         /// containing the associated data (dish, drink, dessert).
         /// If the requested menu item does not exist, returns an error response.</returns>
-        public string RetrieveDataFromDatabase(string comida, string tipo, string request)
+        public string RetrieveDataFromDatabase(string comida1, string tipo1, string request, string? comida2, string? tipo2)
         {
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE DATABASE
             // jsonData = await AnswerAdapterData.GetData();
@@ -36,20 +36,29 @@ namespace MyService.Data
 
             if (request == "0")
             {
-                menuItemJson = databaseController.SearchFullMeal(comida, tipo);
+                menuItemJson = databaseController.SearchFullMeal(comida1, tipo1);
             }
             else if(request == "1" || request == "2" || request == "3")
             {
-                menuItemJson = databaseController.SearchSingle(comida, tipo, request);
+                menuItemJson = databaseController.SearchSingle(comida1, tipo1, request, comida2, tipo2);
             }
             else
             {
                 // Invalid request
-                return JsonConvert.SerializeObject(GenerateErrorResponse("Invalid request"), Formatting.Indented);
+                return JsonConvert.SerializeObject(GenerateErrorResponse(512, "Invalid request"), Formatting.Indented);
+            }
+            int status_code = 512;
+            string errorMessage = "Requested menu item does not exist";
+
+            if (menuItemJson == "519")
+            {
+                status_code = 519;
+                errorMessage = "Set with both items does not exist";
+                menuItemJson = null;
             }
 
-            var response = menuItemJson != null ? GenerateSuccessResponse(menuItemJson) : GenerateErrorResponse("Requested menu item does not exist");
-
+            var response = menuItemJson != null ? GenerateSuccessResponse(200, menuItemJson) : GenerateErrorResponse(status_code, errorMessage);
+            
             return JsonConvert.SerializeObject(response, Formatting.Indented);
         }
 
@@ -76,10 +85,10 @@ namespace MyService.Data
             else
             {
                 // Invalid request
-                return JsonConvert.SerializeObject(GenerateErrorResponse("Invalid request"), Formatting.Indented);
+                return JsonConvert.SerializeObject(GenerateErrorResponse(512, "Invalid request"), Formatting.Indented);
             }
 
-            var finalresponse = response != null ? GenerateSuccessResponse(response) : GenerateErrorAIResponse("Error With OpenAI request");
+            var finalresponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(513, "Error With OpenAI request");
 
             return JsonConvert.SerializeObject(finalresponse, Formatting.Indented);
             
@@ -105,13 +114,13 @@ namespace MyService.Data
         /// </summary>
         /// <param name="input">The JSON input</param>
         /// <returns>A success response object containing the input JSON</returns>
-        private object GenerateSuccessResponse(string input)
+        private object GenerateSuccessResponse(int status_code, string input)
         {
             var jsonData = JsonConvert.DeserializeObject(input);
 
             var response = new
             {
-                status_code = 200,
+                status_code = status_code,
                 status = "success",
                 data = jsonData
             };
@@ -120,34 +129,20 @@ namespace MyService.Data
         }
 
         /// <summary>
-        /// Generates an error response object indicating that the requested menu item does not exist.
+        /// Generates an error response object
         /// </summary>
-        /// <returns>An error response object indicating that the requested menu item does not exist.</returns>
-        private object GenerateErrorResponse(string input)
+        /// <returns>An error response object</returns>
+        private object GenerateErrorResponse(int status_code, string input)
         {
             // Construct the error response object
             var response = new
             {
-                status_code = 512,
+                status_code = status_code,
                 status = "error",
                 message = input
             };
 
             return response;
         }
-
-        private object GenerateErrorAIResponse(string input)
-        {
-            // Construct the error response object
-            var response = new
-            {
-                status_code = 513,
-                status = "error",
-                message = input
-            };
-
-            return response;
-        }
-
     }
 }

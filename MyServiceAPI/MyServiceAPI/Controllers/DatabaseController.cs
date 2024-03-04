@@ -67,8 +67,10 @@ namespace MyServiceAPI.Controllers
         }
 
 
-        public string? SearchSingle(string comida, string tipo, string request)
+        public string? SearchSingle(string comida1, string tipo1, string request, string? comida2, string? tipo2)
         {
+            bool setExists = true;
+
             // Read the JSON file
             string jsonText = File.ReadAllText(filePath);
 
@@ -76,11 +78,49 @@ namespace MyServiceAPI.Controllers
             JArray menusArray = JArray.Parse(jsonText);
 
             // Search for the menu item matching the provided attribute and value
-            JObject? matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu[tipo] == comida);
+            JObject? matchingMenu = null;
+
+            if (comida2 == null && tipo2 == null) // If only one parameter is provided
+            {
+                // Search for the menu item matching the provided attribute and value
+                matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu[tipo1] == comida1);
+            }
+            else // If two parameters are provided
+            {
+                // Check which parameters are provided and construct the query accordingly
+                if (tipo1 == "dish" && tipo2 == "drink")
+                {
+                    matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu["dish"] == comida1 && (string?)menu["drink"] == comida2);
+                }
+                else if (tipo1 == "dish" && tipo2 == "dessert")
+                {
+                    matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu["dish"] == comida1 && (string?)menu["dessert"] == comida2);
+                }
+                else if (tipo1 == "drink" && tipo2 == "dish")
+                {
+                    matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu["drink"] == comida1 && (string?)menu["dish"] == comida2);
+                }
+                else if (tipo1 == "drink" && tipo2 == "dessert")
+                {
+                    matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu["drink"] == comida1 && (string?)menu["dessert"] == comida2);
+                }
+                else if (tipo1 == "dessert" && tipo2 == "dish")
+                {
+                    matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu["dessert"] == comida1 && (string?)menu["dish"] == comida2);
+                }
+                else if (tipo1 == "dessert" && tipo2 == "drink")
+                {
+                    matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu["dessert"] == comida1 && (string?)menu["drink"] == comida2);
+                }
+                if (matchingMenu == null)
+                {
+                    setExists = false;
+                }
+            }
 
             string? response = null;
 
-            if (matchingMenu != null)
+            if (matchingMenu != null && setExists)
             {
                 switch (request)
                 {
@@ -106,6 +146,10 @@ namespace MyServiceAPI.Controllers
 
                 // Serialize the menu item object to JSON format with indentation for readability
                 response = JsonConvert.SerializeObject(responseObject, Formatting.Indented);
+            }
+            if (!setExists)
+            {
+                response = "519";
             }
             // Return the dessert associated with the specified dish or drink
             return response;
