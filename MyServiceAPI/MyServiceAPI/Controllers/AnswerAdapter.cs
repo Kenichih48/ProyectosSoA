@@ -70,6 +70,7 @@ namespace MyService.Data
             if (request == "0")
             {
                 response = await _openAIService.getFoodRecomendations(tipo+":"+comida);
+                
             }
             else if (request == "1" )
             {
