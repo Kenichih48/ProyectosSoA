@@ -83,7 +83,12 @@ namespace MyServiceAPI.Controllers
 
             //Lower all user inputs
             tipo1 = tipo1.ToLower();
-            tipo2 = tipo2.ToLower();
+
+            if(tipo2 != null)
+            {
+                tipo2 = tipo2.ToLower();
+            }
+            
 
             // Search for the menu item matching the provided attribute and value
             JObject? matchingMenu = null;
