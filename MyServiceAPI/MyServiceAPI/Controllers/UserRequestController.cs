@@ -129,7 +129,7 @@ namespace MyServiceAPI.Controllers
             string response = "";
             if (key == "0")
             {
-                    response = answeradapter.RetrieveDataFromDatabase(comida1, tipo1, request, comida2, tipo2);
+                response = answeradapter.RetrieveDataFromDatabase(comida1, tipo1, request, comida2, tipo2);
             }
             else if (key == "1")
             {
@@ -137,7 +137,7 @@ namespace MyServiceAPI.Controllers
             }
             else if (key == "2")
             {
-                //response = ExternalAdapter
+                response = answeradapter.RetrieveDataFromExternalEndPoint(comida1, tipo1, request, comida2, tipo2).Result;
             }
             return response;
         }

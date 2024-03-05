@@ -93,15 +93,42 @@ namespace MyService.Data
             return JsonConvert.SerializeObject(finalresponse, Formatting.Indented);
             
         }
-        public async Task<string> RetrieveDataFromExternalEndPoint()
+        public async Task<string> RetrieveDataFromExternalEndPoint(string comida1, string tipo1, string request, string? comida2 = null, string? tipo2 = null)
         {
+
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE EXTERNALENDPOINTAPI
-            // var response = await httpClient.GetAsync(externalEndPointApiEndpoint);
-            // var jsonData = await response.Content.ReadAsStringAsync();
-            string jsonData = "";
+            HttpClient client = new HttpClient();
+            string _url = formatUrl(comida1,tipo1,request,comida2,tipo2);
+            HttpResponseMessage response = await client.GetAsync(_url);
+            string jsonData = await response.Content.ReadAsStringAsync();
             return jsonData;
         }
 
+        public string formatUrl(string comida1, string tipo1, string request, string? comida2 = null, string? tipo2 = null)
+        {
+            bool secondaryMeal = false;
+            if (comida2 != null && tipo2 != null)
+            {
+                secondaryMeal = true;
+            }
+            if (tipo1 == "dish")
+            {
+                tipo1 = "meal";
+
+                if ((tipo2 == "dish"))
+                {
+                    tipo2 = "meal";
+                }
+            }
+
+            if (secondaryMeal)
+            {
+                return "http://soa41d-project1.eastus.azurecontainer.io/recommendation/custom?" + tipo1 + "=" + comida1 + "&" + tipo2 + "=" + comida2;
+            }
+
+            return "http://soa41d-project1.eastus.azurecontainer.io/recommendation/custom?" + tipo1 + "=" + comida1;
+
+        }
         
         private string TransformJsonToDesiredFormat(string jsonData)
         {
