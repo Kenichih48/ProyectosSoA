@@ -88,9 +88,9 @@ namespace MyService.Data
                 return JsonConvert.SerializeObject(GenerateErrorResponse(512, "Invalid request"), Formatting.Indented);
             }
 
-            var finalresponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(513, "Error With OpenAI request");
+            var finalResponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(513, "Error With OpenAI request");
 
-            return JsonConvert.SerializeObject(finalresponse, Formatting.Indented);
+            return JsonConvert.SerializeObject(finalResponse, Formatting.Indented);
             
         }
         public async Task<string> RetrieveDataFromExternalEndPoint()
@@ -98,15 +98,26 @@ namespace MyService.Data
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE EXTERNALENDPOINTAPI
             // var response = await httpClient.GetAsync(externalEndPointApiEndpoint);
             // var jsonData = await response.Content.ReadAsStringAsync();
-            string jsonData = "";
-            return jsonData;
+            var response = "";
+
+            response = TransformJsonToDesiredFormat(response);
+
+            var finalResponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(514, "Error with External Endpoint request");
+
+            return JsonConvert.SerializeObject(finalResponse, Formatting.Indented);
         }
 
-        
-        private string TransformJsonToDesiredFormat(string jsonData)
+
+        /// <summary>
+        /// Generates the desired JSON from the input given.
+        /// </summary>
+        /// <param name="input">The JSON input</param>
+        /// <returns>A formatted JSON for our api response style</returns>
+        private string TransformJsonToDesiredFormat(string input)
         {
             // LOGIC TO TRANSFORM ANY GIVEN DATA TO OUR NEEDED ANSWER FORMAT
-            return jsonData;
+            var output = input;
+            return output;
         }
 
         /// <summary>
