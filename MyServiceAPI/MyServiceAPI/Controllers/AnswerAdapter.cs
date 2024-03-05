@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using MyServiceAPI.Controllers;
 using MyServiceAPI.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MyService.Data
 {
@@ -99,8 +100,9 @@ namespace MyService.Data
             // var response = await httpClient.GetAsync(externalEndPointApiEndpoint);
             // var jsonData = await response.Content.ReadAsStringAsync();
             var response = "";
+            var tipo = "";
 
-            response = TransformJsonToDesiredFormat(response);
+            response = TransformJsonToDesiredFormat(response, tipo);
 
             var finalResponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(514, "Error with External Endpoint request");
 
@@ -113,10 +115,26 @@ namespace MyService.Data
         /// </summary>
         /// <param name="input">The JSON input</param>
         /// <returns>A formatted JSON for our api response style</returns>
-        private string TransformJsonToDesiredFormat(string input)
+        private string TransformJsonToDesiredFormat(string input, string tipo)
         {
-            // LOGIC TO TRANSFORM ANY GIVEN DATA TO OUR NEEDED ANSWER FORMAT
-            var output = input;
+            //   {
+            //    "meal": "Arroz con pollo",
+            //    "dessert": "Arroz con leche",
+            //    "drink": "Coca Cola"
+            //   }
+
+            // Deserialize the JSON string into a JObject
+            JObject obj = JsonConvert.DeserializeObject<JObject>(input);
+
+            // Change the key from "meal" to "dish"
+            if (obj["meal"] != null)
+            {
+                obj["dish"] = obj["meal"];
+                obj.Remove("meal");
+                obj.Remove(tipo);
+            }
+
+            string output = JsonConvert.SerializeObject(obj, Formatting.Indented);
             return output;
         }
 
