@@ -31,8 +31,6 @@ namespace MyService.Data
         /// If the requested menu item does not exist, returns an error response.</returns>
         public string RetrieveDataFromDatabase(string comida1, string tipo1, string request, string? comida2, string? tipo2)
         {
-            // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE DATABASE
-            // jsonData = await AnswerAdapterData.GetData();
             string? menuItemJson = null;
 
             if (request == "0")
@@ -209,28 +207,35 @@ namespace MyService.Data
             //    "dessert": "Arroz con leche",
             //    "drink": "Coca Cola"
             //   }
-            if (input == null || input.StartsWith("Error"))
+            if (input == null)
             {
                 return null;
             } else
             {
-                // Deserialize the JSON string into a JObject
-                JObject obj = JsonConvert.DeserializeObject<JObject>(input);
-
-                // Change the key from "meal" to "dish"
-                if (obj["meal"] != null)
+                try
                 {
-                    obj["dish"] = obj["meal"];
-                    obj.Remove("meal");
-                    obj.Remove(tipo1.ToLower());
-                    if (tipo2 != null)
-                    {
-                        obj.Remove(tipo2);
-                    }
-                }
+                    // Deserialize the JSON string into a JObject
+                    JObject obj = JsonConvert.DeserializeObject<JObject>(input);
 
-                string output = JsonConvert.SerializeObject(obj, Formatting.Indented);
-                return output;
+                    // Change the key from "meal" to "dish"
+                    if (obj["meal"] != null)
+                    {
+                        obj["dish"] = obj["meal"];
+                        obj.Remove("meal");
+                        obj.Remove(tipo1.ToLower());
+                        if (tipo2 != null)
+                        {
+                            obj.Remove(tipo2);
+                        }
+                    }
+
+                    string output = JsonConvert.SerializeObject(obj, Formatting.Indented);
+                    return output;
+                } catch (Exception ex)
+                {
+                    return null;
+                }
+                
             }
         }
 
