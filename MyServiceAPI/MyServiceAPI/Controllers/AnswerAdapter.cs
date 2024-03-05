@@ -112,6 +112,15 @@ namespace MyService.Data
             return JsonConvert.SerializeObject(finalResponse, Formatting.Indented);
         }
 
+        /// <summary>
+        /// Generates the desired URL from the input given to make the external endpoint API call.
+        /// </summary>
+        /// <param name="comida1">Food name 1</param>
+        /// <param name="tipo1">Food type 1</param>
+        /// <param name="request">Type of request</param>
+        /// <param name="comida2">Food name 2 (optional)</param>
+        /// <param name="tipo2">Food type 2 (optional)</param>
+        /// <returns>A formatted URL for the external endpoint</returns>
         public string formatUrl(string comida1, string tipo1, string request, string? comida2 = null, string? tipo2 = null)
         {
             bool secondaryMeal = false;
@@ -146,6 +155,11 @@ namespace MyService.Data
 
         }
 
+        /// <summary>
+        /// Replaces the spaces in a given string for %20 as per requested in the external endpoint.
+        /// </summary>
+        /// <param name="input">The URL with spaces</param>
+        /// <returns>The URL with the spaces changed out by %20</returns>
         public string ReplaceSpaces(string input)
         {
             if (input == null)
