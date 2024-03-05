@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using MyServiceAPI.Controllers;
 using MyServiceAPI.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace MyService.Data
 {
@@ -88,9 +89,9 @@ namespace MyService.Data
                 return JsonConvert.SerializeObject(GenerateErrorResponse(512, "Invalid request"), Formatting.Indented);
             }
 
-            var finalresponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(513, "Error With OpenAI request");
+            var finalResponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(513, "Error With OpenAI request");
 
-            return JsonConvert.SerializeObject(finalresponse, Formatting.Indented);
+            return JsonConvert.SerializeObject(finalResponse, Formatting.Indented);
             
         }
         public async Task<string> RetrieveDataFromExternalEndPoint(string comida1, string tipo1, string request, string? comida2 = null, string? tipo2 = null)
@@ -100,8 +101,12 @@ namespace MyService.Data
             HttpClient client = new HttpClient();
             string _url = formatUrl(comida1,tipo1,request,comida2,tipo2);
             HttpResponseMessage response = await client.GetAsync(_url);
-            string jsonData = await response.Content.ReadAsStringAsync();
-            return jsonData;
+            string response = await response.Content.ReadAsStringAsync();
+            response = TransformJsonToDesiredFormat(response, tipo1, tipo2);
+
+            var finalResponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(514, "Error with External Endpoint request");
+
+            return JsonConvert.SerializeObject(finalResponse, Formatting.Indented);
         }
 
         public string formatUrl(string comida1, string tipo1, string request, string? comida2 = null, string? tipo2 = null)
@@ -129,11 +134,42 @@ namespace MyService.Data
             return "http://soa41d-project1.eastus.azurecontainer.io/recommendation/custom?" + tipo1 + "=" + comida1;
 
         }
-        
-        private string TransformJsonToDesiredFormat(string jsonData)
+
+        /// <summary>
+        /// Generates the desired JSON from the input given.
+        /// </summary>
+        /// <param name="input">The JSON input</param>
+        /// <returns>A formatted JSON for our api response style</returns>
+        private string TransformJsonToDesiredFormat(string input, string tipo1, string tipo2)
         {
-            // LOGIC TO TRANSFORM ANY GIVEN DATA TO OUR NEEDED ANSWER FORMAT
-            return jsonData;
+            //   {
+            //    "meal": "Arroz con pollo",
+            //    "dessert": "Arroz con leche",
+            //    "drink": "Coca Cola"
+            //   }
+            if (input == null || input.StartsWith("Error"))
+            {
+                return null;
+            } else
+            {
+                // Deserialize the JSON string into a JObject
+                JObject obj = JsonConvert.DeserializeObject<JObject>(input);
+
+                // Change the key from "meal" to "dish"
+                if (obj["meal"] != null)
+                {
+                    obj["dish"] = obj["meal"];
+                    obj.Remove("meal");
+                    obj.Remove(tipo1);
+                    if (tipo2 != null)
+                    {
+                        obj.Remove(tipo2);
+                    }
+                }
+
+                string output = JsonConvert.SerializeObject(obj, Formatting.Indented);
+                return output;
+            }
         }
 
         /// <summary>

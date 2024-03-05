@@ -39,6 +39,9 @@ namespace MyServiceAPI.Controllers
             // Parse the JSON array
             JArray menusArray = JArray.Parse(jsonText);
 
+            //Lower all user inputs
+            tipo = tipo.ToLower();
+
             // Search for the menu item matching the provided attribute and value
             JObject? matchingMenu = menusArray.Children<JObject>().FirstOrDefault(menu => (string?)menu[tipo] == comida);
 
@@ -77,6 +80,10 @@ namespace MyServiceAPI.Controllers
 
             // Parse the JSON array
             JArray menusArray = JArray.Parse(jsonText);
+
+            //Lower all user inputs
+            tipo1 = tipo1.ToLower();
+            tipo2 = tipo2.ToLower();
 
             // Search for the menu item matching the provided attribute and value
             JObject? matchingMenu = null;
