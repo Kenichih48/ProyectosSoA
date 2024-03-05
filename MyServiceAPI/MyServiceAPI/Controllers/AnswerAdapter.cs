@@ -122,20 +122,25 @@ namespace MyService.Data
             //    "dessert": "Arroz con leche",
             //    "drink": "Coca Cola"
             //   }
-
-            // Deserialize the JSON string into a JObject
-            JObject obj = JsonConvert.DeserializeObject<JObject>(input);
-
-            // Change the key from "meal" to "dish"
-            if (obj["meal"] != null)
+            if (input == null || input.StartsWith("Error"))
             {
-                obj["dish"] = obj["meal"];
-                obj.Remove("meal");
-                obj.Remove(tipo);
-            }
+                return null;
+            } else
+            {
+                // Deserialize the JSON string into a JObject
+                JObject obj = JsonConvert.DeserializeObject<JObject>(input);
 
-            string output = JsonConvert.SerializeObject(obj, Formatting.Indented);
-            return output;
+                // Change the key from "meal" to "dish"
+                if (obj["meal"] != null)
+                {
+                    obj["dish"] = obj["meal"];
+                    obj.Remove("meal");
+                    obj.Remove(tipo);
+                }
+
+                string output = JsonConvert.SerializeObject(obj, Formatting.Indented);
+                return output;
+            }
         }
 
         /// <summary>
