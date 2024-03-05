@@ -100,9 +100,10 @@ namespace MyService.Data
             // var response = await httpClient.GetAsync(externalEndPointApiEndpoint);
             // var jsonData = await response.Content.ReadAsStringAsync();
             var response = "";
-            var tipo = "";
+            var tipo1 = "";
+            var tipo2 = "";
 
-            response = TransformJsonToDesiredFormat(response, tipo);
+            response = TransformJsonToDesiredFormat(response, tipo1, tipo2);
 
             var finalResponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(514, "Error with External Endpoint request");
 
@@ -115,7 +116,7 @@ namespace MyService.Data
         /// </summary>
         /// <param name="input">The JSON input</param>
         /// <returns>A formatted JSON for our api response style</returns>
-        private string TransformJsonToDesiredFormat(string input, string tipo)
+        private string TransformJsonToDesiredFormat(string input, string tipo1, string tipo2)
         {
             //   {
             //    "meal": "Arroz con pollo",
@@ -135,7 +136,11 @@ namespace MyService.Data
                 {
                     obj["dish"] = obj["meal"];
                     obj.Remove("meal");
-                    obj.Remove(tipo);
+                    obj.Remove(tipo1);
+                    if (tipo2 != null)
+                    {
+                        obj.Remove(tipo2);
+                    }
                 }
 
                 string output = JsonConvert.SerializeObject(obj, Formatting.Indented);
