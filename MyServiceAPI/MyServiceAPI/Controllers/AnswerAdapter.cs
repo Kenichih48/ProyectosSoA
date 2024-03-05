@@ -49,9 +49,9 @@ namespace MyService.Data
             int status_code = 512;
             string errorMessage = "Requested menu item does not exist";
 
-            if (menuItemJson == "519")
+            if (menuItemJson == "515")
             {
-                status_code = 519;
+                status_code = 515;
                 errorMessage = "Set with both items does not exist";
                 menuItemJson = null;
             }
