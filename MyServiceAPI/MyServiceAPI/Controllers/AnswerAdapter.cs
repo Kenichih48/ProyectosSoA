@@ -100,8 +100,10 @@ namespace MyService.Data
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE EXTERNALENDPOINTAPI
             HttpClient client = new HttpClient();
             string _url = formatUrl(comida1,tipo1,request,comida2,tipo2);
-            HttpResponseMessage response = await client.GetAsync(_url);
-            string response = await response.Content.ReadAsStringAsync();
+            HttpResponseMessage Httresponse = await client.GetAsync(_url);
+            string response = await Httresponse.Content.ReadAsStringAsync();
+
+
             response = TransformJsonToDesiredFormat(response, tipo1, tipo2);
 
             var finalResponse = response != null ? GenerateSuccessResponse(200, response) : GenerateErrorResponse(514, "Error with External Endpoint request");
@@ -126,6 +128,10 @@ namespace MyService.Data
                 }
             }
 
+            comida1 = ReplaceSpaces(comida1);
+
+            comida2 = ReplaceSpaces(comida2);
+
             if (secondaryMeal)
             {
                 return "http://soa41d-project1.eastus.azurecontainer.io/recommendation/custom?" + tipo1 + "=" + comida1 + "&" + tipo2 + "=" + comida2;
@@ -133,6 +139,43 @@ namespace MyService.Data
 
             return "http://soa41d-project1.eastus.azurecontainer.io/recommendation/custom?" + tipo1 + "=" + comida1;
 
+        }
+
+        public string ReplaceSpaces(string input)
+        {
+            if (input == null)
+                return null;
+
+            int spaceCount = 0;
+            foreach (char c in input)
+            {
+                if (c == ' ')
+                {
+                    spaceCount++;
+                }
+            }
+
+            int newLength = input.Length + (spaceCount * 2);
+            char[] result = new char[newLength];
+
+            int j = 0;
+            for (int i = 0; i < input.Length; i++)
+            {
+                if (input[i] == ' ')
+                {
+                    result[j] = '%';
+                    result[j + 1] = '2';
+                    result[j + 2] = '0';
+                    j += 3;
+                }
+                else
+                {
+                    result[j] = input[i];
+                    j++;
+                }
+            }
+
+            return new string(result);
         }
 
         /// <summary>
