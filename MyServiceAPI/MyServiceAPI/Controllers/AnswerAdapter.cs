@@ -100,7 +100,7 @@ namespace MyService.Data
 
             // CHANGE jsonData TO WHATEVER WE USE TO GET THE DATA FROM THE EXTERNALENDPOINTAPI
             HttpClient client = new HttpClient();
-            string _url = formatUrl(comida1,tipo1,request,comida2,tipo2);
+            string _url = formatUrl(comida1, tipo1, request, comida2, tipo2);
             HttpResponseMessage Httresponse = await client.GetAsync(_url);
             string response = await Httresponse.Content.ReadAsStringAsync();
 
@@ -115,9 +115,13 @@ namespace MyService.Data
         public string formatUrl(string comida1, string tipo1, string request, string? comida2 = null, string? tipo2 = null)
         {
             bool secondaryMeal = false;
+
+            tipo1 = tipo1.ToLower();
+
             if (comida2 != null && tipo2 != null)
             {
                 secondaryMeal = true;
+                tipo2 = tipo2.ToLower();
             }
             if (tipo1 == "dish")
             {
@@ -204,7 +208,7 @@ namespace MyService.Data
                 {
                     obj["dish"] = obj["meal"];
                     obj.Remove("meal");
-                    obj.Remove(tipo1);
+                    obj.Remove(tipo1.ToLower());
                     if (tipo2 != null)
                     {
                         obj.Remove(tipo2);
