@@ -10,15 +10,18 @@ namespace MyService.Data
     // header, body and status
     public class AnswerAdapter
     {
-        private readonly string filePath;
-        private readonly DatabaseController databaseController;
-        private readonly InterfaceOpenAIService _openAIService;
+        private readonly string filePath1, filePath2;
+        private readonly MenuDatabaseController menuDatabaseController;
+        private readonly ReservationDatabaseController resDatabaseController;
+        //private readonly InterfaceOpenAIService _openAIService;
 
-        public AnswerAdapter(string filePath)
+        public AnswerAdapter(string filePath1, string filePath2)
         {
-            this.filePath = filePath;
-            this.databaseController = new DatabaseController(filePath);
-            _openAIService = openAIService;
+            this.filePath1 = filePath1;
+            this.filePath2 = filePath2;
+            this.menuDatabaseController = new MenuDatabaseController(filePath1);
+            this.resDatabaseController = new ReservationDatabaseController(filePath2);
+            //_openAIService = openAIService;
         }
         /// <summary>
         /// Retrieves data from the database based on the provided food and type.
@@ -29,17 +32,17 @@ namespace MyService.Data
         /// If the requested menu item is found in the database, returns a success response
         /// containing the associated data (dish, drink, dessert).
         /// If the requested menu item does not exist, returns an error response.</returns>
-        public string RetrieveDataFromDatabase(string comida1, string tipo1, string request, string? comida2, string? tipo2)
+        public string RetrieveDataFromMealDatabase(string comida1, string tipo1, string request, string? comida2, string? tipo2)
         {
             string? menuItemJson = null;
 
             if (request == "0")
             {
-                menuItemJson = databaseController.SearchFullMeal(comida1, tipo1);
+                menuItemJson = menuDatabaseController.SearchFullMeal(comida1, tipo1);
             }
             else if(request == "1" || request == "2" || request == "3")
             {
-                menuItemJson = databaseController.SearchSingle(comida1, tipo1, request, comida2, tipo2);
+                menuItemJson = menuDatabaseController.SearchSingle(comida1, tipo1, request, comida2, tipo2);
             }
             else
             {
@@ -61,6 +64,15 @@ namespace MyService.Data
             return JsonConvert.SerializeObject(response, Formatting.Indented);
         }
 
+
+        public string RetrieveDataFromReservationDatabase(string date, string time)
+        {
+            
+            
+            string reservationJson = this.resDatabaseController.SearchBestOptions(date, time);
+            return reservationJson;
+        }
+        /*
         public async Task<string> RetrieveDataFromOpenAIAPI(string comida, string tipo, string request)
         {
             string? response = null;
@@ -153,6 +165,7 @@ namespace MyService.Data
 
         }
 
+
         /// <summary>
         /// Replaces the spaces in a given string for %20 as per requested in the external endpoint.
         /// </summary>
@@ -238,6 +251,7 @@ namespace MyService.Data
                 
             }
         }
+        */
 
         /// <summary>
         /// Generates a success response object for the given input JSON.

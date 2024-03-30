@@ -1,0 +1,127 @@
+[
+  {
+    "Date": "Monday",
+    "Time": "13:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Monday",
+    "Time": "14:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Monday",
+    "Time": "15:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Monday",
+    "Time": "16:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Monday",
+    "Time": "17:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Tuesday",
+    "Time": "13:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Tuesday",
+    "Time": "14:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Tuesday",
+    "Time": "15:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Tuesday",
+    "Time": "16:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Tuesday",
+    "Time": "17:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Wednesday",
+    "Time": "13:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Wednesday",
+    "Time": "14:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Wednesday",
+    "Time": "15:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Wednesday",
+    "Time": "16:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Wednesday",
+    "Time": "17:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Thursday",
+    "Time": "13:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Thursday",
+    "Time": "14:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Thursday",
+    "Time": "15:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Thursday",
+    "Time": "16:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Thursday",
+    "Time": "17:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Friday",
+    "Time": "13:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Friday",
+    "Time": "14:00",
+    "State": "Taken"
+  },
+  {
+    "Date": "Friday",
+    "Time": "15:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Friday",
+    "Time": "16:00",
+    "State": "Free"
+  },
+  {
+    "Date": "Friday",
+    "Time": "17:00",
+    "State": "Taken"
+  }
+]
