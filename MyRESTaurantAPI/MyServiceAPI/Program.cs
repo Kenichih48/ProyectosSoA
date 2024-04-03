@@ -12,6 +12,20 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<InterfaceOpenAIService, OpenAIService>();
 
+builder.Services.AddCors(options => {
+
+
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyHeader();
+            policy.AllowAnyMethod();
+            policy.AllowAnyOrigin();
+
+        });
+
+});
+
 var app = builder.Build();
 
 
@@ -30,5 +44,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors();
 
 app.Run();

@@ -70,6 +70,31 @@ namespace MyServiceAPI.Controllers
             return menuItemJson;
         }
 
+        public string? getMenu ()
+        {
+            string? menuItemJson = null;
+
+            // Read the JSON file
+            string jsonText = File.ReadAllText(filePath);
+
+            // Parse the JSON array
+            JArray menusArray = JArray.Parse(jsonText);
+
+            // Search for the menu item matching the provided attribute and value
+            IEnumerable<JObject> allMenus = menusArray.Children<JObject>();
+
+            if (!allMenus.Any()) 
+            {
+                return menuItemJson;
+            } else
+            {
+                menuItemJson = JsonConvert.SerializeObject(allMenus, Formatting.Indented);
+                return menuItemJson;
+            }
+
+
+        }
+
 
         public string? SearchSingle(string comida1, string tipo1, string request, string? comida2, string? tipo2)
         {

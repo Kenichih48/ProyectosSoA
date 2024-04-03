@@ -13,6 +13,7 @@ namespace MyService.Data
         private readonly string filePath1, filePath2;
         private readonly MenuDatabaseController menuDatabaseController;
         private readonly ReservationDatabaseController resDatabaseController;
+        private AnswerGenerator answerGenerator = new AnswerGenerator();
         //private readonly InterfaceOpenAIService _openAIService;
 
         public AnswerAdapter(string filePath1, string filePath2)
@@ -47,7 +48,7 @@ namespace MyService.Data
             else
             {
                 // Invalid request
-                return JsonConvert.SerializeObject(GenerateErrorResponse(512, "Invalid request"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(512, "Invalid request"), Formatting.Indented);
             }
             int status_code = 512;
             string errorMessage = "Requested menu item does not exist";
@@ -59,8 +60,22 @@ namespace MyService.Data
                 menuItemJson = null;
             }
 
-            var response = menuItemJson != null ? GenerateSuccessResponse(200, menuItemJson) : GenerateErrorResponse(status_code, errorMessage);
+            var response = menuItemJson != null ? answerGenerator.GenerateSuccessResponse(200, menuItemJson) : answerGenerator.GenerateErrorResponse(status_code, errorMessage);
             
+            return JsonConvert.SerializeObject(response, Formatting.Indented);
+        }
+
+        public string RetrieveMenu()
+        {
+            string? menu = null;
+
+            menu = menuDatabaseController.getMenu();
+
+            int errorCode = 463;
+            string errorMessage = "Menu items is empty";
+
+            var response = menu != null ? answerGenerator.GenerateSuccessResponse(200, menu) : answerGenerator.GenerateErrorResponse(errorCode, errorMessage);
+
             return JsonConvert.SerializeObject(response, Formatting.Indented);
         }
 
@@ -70,6 +85,7 @@ namespace MyService.Data
             
             
             string reservationJson = this.resDatabaseController.SearchBestOptions(date, time);
+
             return reservationJson;
         }
         /*
@@ -252,41 +268,5 @@ namespace MyService.Data
             }
         }
         */
-
-        /// <summary>
-        /// Generates a success response object for the given input JSON.
-        /// </summary>
-        /// <param name="input">The JSON input</param>
-        /// <returns>A success response object containing the input JSON</returns>
-        private object GenerateSuccessResponse(int status_code, string input)
-        {
-            var jsonData = JsonConvert.DeserializeObject(input);
-
-            var response = new
-            {
-                status_code = status_code,
-                status = "success",
-                data = jsonData
-            };
-
-            return response;
-        }
-
-        /// <summary>
-        /// Generates an error response object
-        /// </summary>
-        /// <returns>An error response object</returns>
-        private object GenerateErrorResponse(int status_code, string input)
-        {
-            // Construct the error response object
-            var response = new
-            {
-                status_code = status_code,
-                status = "error",
-                message = input
-            };
-
-            return response;
-        }
     }
 }

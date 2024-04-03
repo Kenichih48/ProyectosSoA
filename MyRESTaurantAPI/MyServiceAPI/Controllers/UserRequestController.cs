@@ -13,6 +13,7 @@ namespace MyServiceAPI.Controllers
     {
         //private readonly InterfaceOpenAIService _openAIService;
         public AnswerAdapter answeradapter;
+        private AnswerGenerator answerGenerator = new AnswerGenerator();
 
         public UserRequestController()
         {
@@ -20,20 +21,20 @@ namespace MyServiceAPI.Controllers
             answeradapter = new AnswerAdapter("MealDataBase.json", "ReservationDataBase.json");
         }
 
-        [HttpGet]
-        [Route("GetAvailabilty")]
+        [HttpPost]
+        [Route("GetAvailability")]
         public string GetAvailabilty(string? date, string? time)
         {
             string response;
 
             if (date == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(460, "Date is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(460, "Date is empty"), Formatting.Indented);
 
             }
             else if (time == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(461, "Time is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(461, "Time is empty"), Formatting.Indented);
             }
 
             response = ProcessReservation(date, time);
@@ -52,10 +53,10 @@ namespace MyServiceAPI.Controllers
             }else */
             if (comida == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(453, "Comida is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(453, "Comida is empty"), Formatting.Indented);
             }else if (tipo == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(454, "Tipo is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(454, "Tipo is empty"), Formatting.Indented);
             }
             string response = ProcessMeal(comida, tipo, "0", null, null);
             
@@ -73,19 +74,19 @@ namespace MyServiceAPI.Controllers
             else */
             if (comida1 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(453, "Comida1 is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(453, "Comida1 is empty"), Formatting.Indented);
             }
             else if (tipo1 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(454, "Tipo1 is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(454, "Tipo1 is empty"), Formatting.Indented);
             }
             else if (comida2 != null && tipo2 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(455, "Tipo2 is empty while Comida2 is not"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(455, "Tipo2 is empty while Comida2 is not"), Formatting.Indented);
             }
             else if (comida2 == null && tipo2 != null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(456, "Comida2 is empty while Tipo2 is not"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(456, "Comida2 is empty while Tipo2 is not"), Formatting.Indented);
             }
             string response = ProcessMeal(comida1, tipo1, "1", comida2, tipo2);
             return response;
@@ -102,19 +103,19 @@ namespace MyServiceAPI.Controllers
             else */
             if (comida1 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(453, "Comida1 is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(453, "Comida1 is empty"), Formatting.Indented);
             }
             else if (tipo1 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(454, "Tipo1 is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(454, "Tipo1 is empty"), Formatting.Indented);
             }
             else if (comida2 != null && tipo2 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(455, "Tipo2 is empty while Comida2 is not"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(455, "Tipo2 is empty while Comida2 is not"), Formatting.Indented);
             }
             else if (comida2 == null && tipo2 != null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(456, "Comida2 is empty while Tipo2 is not"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(456, "Comida2 is empty while Tipo2 is not"), Formatting.Indented);
             }
             string response = ProcessMeal(comida1, tipo1, "2", comida2, tipo2);
             return response;
@@ -131,21 +132,29 @@ namespace MyServiceAPI.Controllers
             else */
             if (comida1 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(453, "Comida1 is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(453, "Comida1 is empty"), Formatting.Indented);
             }
             else if (tipo1 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(454, "Tipo1 is empty"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(454, "Tipo1 is empty"), Formatting.Indented);
             }
             else if (comida2 != null && tipo2 == null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(455, "Tipo2 is empty while Comida2 is not"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(455, "Tipo2 is empty while Comida2 is not"), Formatting.Indented);
             }
             else if (comida2 == null && tipo2 != null)
             {
-                return JsonConvert.SerializeObject(GenerateErrorResponse(456, "Comida2 is empty while Tipo2 is not"), Formatting.Indented);
+                return JsonConvert.SerializeObject(answerGenerator.GenerateErrorResponse(456, "Comida2 is empty while Tipo2 is not"), Formatting.Indented);
             }
             string response = ProcessMeal(comida1, tipo1, "3", comida2, tipo2);
+            return response;
+        }
+
+        [HttpGet]
+        [Route("GetMenu")]
+        public string getMenu()
+        {
+            string response = ProcessMenu();
             return response;
         }
 
@@ -176,15 +185,11 @@ namespace MyServiceAPI.Controllers
             return response;
         }
 
-        private object GenerateErrorResponse(int status_code, string input)
+        private string ProcessMenu()
         {
-            // Construct the error response object
-            var response = new
-            {
-                status_code = status_code,
-                status = "error",
-                message = input
-            };
+            string response = "";
+
+            response = answeradapter.RetrieveMenu();
 
             return response;
         }
