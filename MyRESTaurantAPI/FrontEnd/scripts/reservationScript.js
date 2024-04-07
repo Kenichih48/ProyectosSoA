@@ -24,7 +24,7 @@ reservationForm.addEventListener('submit', async (event) => {
     if (response.ok) {
         const responseData = await response.json();
         if (responseData.status_code === 200) {
-            reservationMessage.textContent = 'Reservation was done succesfully';
+            reservationMessage.textContent = 'Reservation date and time is available';
             reservationMessage.style.color = 'green';
         } else if (responseData.status_code === 201) {
             const data = responseData.data;
