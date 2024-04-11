@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from AnswerAdapterMod import AnswerAdapter
 from AnswerGeneratorMod import AnswerGenerator
+from SentimentFunct.SentimentController import Sentiment
 
 
 app = Flask(__name__)
@@ -38,20 +39,24 @@ class UserRequestController:
         response = self.answer_adapter.retrieve_menu()
         return response
 
+    def process_emotions(self, text):
+        """
+        Process emotion related requests
+        """
+        response = Sentiment.getSentiment(text, 'SentimentFunct/soa-cloud-3f986d1b8bf4.json')
+        return self.answer_generator.generate_success_response(200, "Scale:" + str(response))
+
 controller = UserRequestController()
 
 
-@app.route("/GetEmotions", methods=["GET"])
+@app.route("/PostEmotions", methods=["POST"])
 def get_emotions():
-    scale = request.args.get("scale")
-    time = request.args.get("time")
+    text = request.get_json().get("review")
 
-    if not date:
-        return jsonify(controller.answer_generator.generate_error_response(460, "Date is empty")), 400
-    elif not time:
-        return jsonify(controller.answer_generator.generate_error_response(461, "Time is empty")), 400
+    if not text:
+        return jsonify(controller.answer_generator.generate_error_response(460, "Text is empty")), 400
 
-    response = controller.process_emotions(emotion)
+    response = controller.process_emotions(text)
     return jsonify(response), 200
 
 
@@ -59,6 +64,7 @@ def get_emotions():
 
 @app.route("/GetAvailability", methods=["GET"])
 def get_availability():
+    #controller = UserRequestController()
     date = request.args.get("date")
     time = request.args.get("time")
 

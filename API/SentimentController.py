@@ -39,13 +39,10 @@ def filterSentiment(score, magnitude):
     return result
 
 
-def main():
+def getSentiment(text):
     #Recibir text de front end acá
-    text = "This dish was alright, I mean it did its job, better than Applebees that's for sure" #entrada usuario
+    #text = "This dish was alright, I mean it did its job, better than Applebees that's for sure" #entrada usuario
     score, magnitude = GCNL(text)
     sentiment = filterSentiment(score, magnitude)
     print(sentiment)
     #mandar sentiment a front end acá
-
-if __name__ == "__main__":
-    main()
