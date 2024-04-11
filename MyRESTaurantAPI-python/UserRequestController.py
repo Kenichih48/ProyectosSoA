@@ -46,9 +46,9 @@ class UserRequestController:
         response = Sentiment.getSentiment(text, 'SentimentFunct/soa-cloud-3f986d1b8bf4.json')
         return self.answer_generator.generate_success_response(200, "Scale:" + str(response))
 
-controller = UserRequestController()
+#controller = UserRequestController()
 
-
+"""
 @app.route("/PostEmotions", methods=["POST"])
 def get_emotions():
     text = request.get_json().get("review")
@@ -58,10 +58,10 @@ def get_emotions():
 
     response = controller.process_emotions(text)
     return jsonify(response), 200
+"""
 
 
-
-
+"""
 @app.route("/GetAvailability", methods=["GET"])
 def get_availability():
     #controller = UserRequestController()
@@ -75,7 +75,8 @@ def get_availability():
 
     response = controller.process_reservation(date, time)
     return jsonify(response), 200
-
+"""
+"""
 @app.route("/GetFullMeal", methods=["GET"])
 def get_full_meal():
     comida = request.args.get("comida")
@@ -88,13 +89,15 @@ def get_full_meal():
 
     response = controller.process_meal(comida, tipo, "0")
     return jsonify(response), 200
+"""
 
-
+"""
 @app.route("/GetMenu", methods=["GET"])
 def get_menu():
     response = controller.process_menu()
     return jsonify(response), 200
-
+"""
+    
 """
 @app.route("/GetDessert", methods=["GET"])
 def get_dessert():
