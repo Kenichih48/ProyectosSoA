@@ -163,16 +163,7 @@ namespace MyServiceAPI.Controllers
             string response = "";
 
             response = answeradapter.RetrieveDataFromMealDatabase(comida1, tipo1, request, comida2, tipo2);
-            /*
-            else if (key == "1")
-            {
-                response = answeradapter.RetrieveDataFromOpenAIAPI(comida1, tipo1, request).Result;
-            }
-            else if (key == "2")
-            {
-                response = answeradapter.RetrieveDataFromExternalEndPoint(comida1, tipo1, request, comida2, tipo2).Result;
-            }
-            */
+
             return response;
         }
 
