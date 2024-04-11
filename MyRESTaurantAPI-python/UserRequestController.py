@@ -3,7 +3,7 @@ from AnswerAdapterMod import AnswerAdapter
 from AnswerGeneratorMod import AnswerGenerator
 from SentimentFunct.SentimentController import Sentiment
 
-
+#from UserRequestController import UserRequestController
 app = Flask(__name__)
 
 class UserRequestController:
@@ -89,6 +89,13 @@ def get_full_meal():
     response = controller.process_meal(comida, tipo, "0")
     return jsonify(response), 200
 
+
+@app.route("/GetMenu", methods=["GET"])
+def get_menu():
+    response = controller.process_menu()
+    return jsonify(response), 200
+
+"""
 @app.route("/GetDessert", methods=["GET"])
 def get_dessert():
     comida1 = request.args.get("comida1")
@@ -145,11 +152,9 @@ def get_drink():
 
     response = controller.process_meal(comida1, tipo1, "3", comida2, tipo2)
     return jsonify(response), 200
+"""
 
-@app.route("/GetMenu", methods=["GET"])
-def get_menu():
-    response = controller.process_menu()
-    return jsonify(response), 200
+
 
 
 if __name__ == "__main__":
