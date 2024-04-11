@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+#from flask import Flask, request, jsonify
 from AnswerAdapterMod import AnswerAdapter
 from AnswerGeneratorMod import AnswerGenerator
 from SentimentFunct.SentimentController import Sentiment
@@ -44,7 +44,7 @@ class UserRequestController:
         Process emotion related requests
         """
         response = Sentiment.getSentiment(text, 'SentimentFunct/soa-cloud-3f986d1b8bf4.json')
-        return self.answer_generator.generate_success_response(200, "Scale:" + str(response))
+        return self.answer_generator.generate_success_response(200, str(response))
 
 #controller = UserRequestController()
 
@@ -159,11 +159,6 @@ def get_drink():
 
 
 
-'''
-if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8777)
 
-
-'''
-
-
+#if __name__ == "__main__":
+#    app.run(host='0.0.0.0', port=8777)
