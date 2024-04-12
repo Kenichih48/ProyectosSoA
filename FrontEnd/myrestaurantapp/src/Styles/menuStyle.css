@@ -1,0 +1,63 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color:#F4F3EE;
+    color: black;
+  }
+  
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+h3 {
+  text-align: center;
+  font-weight: normal;
+}
+
+#dish-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 20px;
+}
+
+#drink-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 20px;
+}
+
+#dessert-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-gap: 20px;
+}
+
+.menu-item {
+  border: 1px solid #8A817C;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #BCB8B1;
+  color: white;
+}
+
+.menu-item h3 {
+  margin-top: 0;
+}
+
+.menu-item p {
+  margin-bottom: 0;
+}
+
+.highlight {
+  background-color: #4CAF50; /* Cambia el color de fondo */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Agrega una sombra */
+  transform: scale(1.05); /* Escala ligeramente el elemento */
+  transition: all 0.3s ease; /* Agrega una transición suave */
+}
