@@ -18,22 +18,26 @@ class UserRequestController:
         self.answer_generator = AnswerGenerator()
 
 
-    def get_reservations(self):
+    def get_user_id(self, id_u):
         
-        response = self.answer_adapter.retrieve_get_res()
+        response = self.answer_adapter.retrieve_get_id(id_u)
         
         return response
 
-    def add_reservation(self, date, time, state):
+    def add_user(self, pw, email, name, lname, direct, access):
 
-        response = self.answer_adapter.retrieve_add_res(date, time, state)
+        response = self.answer_adapter.retrieve_add_user(pw, email, name, lname, direct, access)
         return response
 
-    def edit_reservation(self, id_r, date, time, state):
+    def login(self, pw, email):
 
-        response = self.answer_adapter.retrieve_edit_res(id_r, date, time, state)
+        response = self.answer_adapter.retrieve_login(pw, email)
         return response
 
+    def update_password(self, id_u, pw):
+
+        response = self.answer_adapter.retrieve_update_password(id_u, pw)
+        return response
 
 
 

@@ -1,44 +1,28 @@
 import json
+import pyodbc
+
 
 class MenuDatabaseController:
     """
     Controller for accessing menu data.
     """
-
-    def __init__(self, file_path):
+    
+    def __init__(self):
         """
         Initializes MenuDatabaseController with the file path.
 
         Parameters:
             file_path (str): The file path for the menu data.
         """
-        self.file_path = file_path
 
-    def search_full_meal(self, comida, tipo):
-        """
-        Searches for a full meal in the database based on the provided food and type.
+        server = 'DESKTOP-LMJ5G1R\\SQLEXPRESS'  # Nombre del servidor y nombre de instancia (si es necesario)
+        database = 'MyRestaurantDataBase'  # Nombre de la base de datos
+        username = 'INTEL'  # Nombre de usuario
+        password = ''  # Contraseña
 
-        Parameters:
-            comida (str): The type of food to search for in the database.
-            tipo (str): The type of information to retrieve (e.g., "dish", "drink", or "dessert").
+        self.conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password};Trusted_Connection=yes;'
 
-        Returns:
-            str: A JSON string representing the retrieved data of the menu item.
-        """
-        with open(self.file_path, 'r') as file:
-            menu_data = json.load(file)
-
-            matching_menu = next((menu for menu in menu_data if menu.get(tipo.lower()) == comida), None)
-
-            if matching_menu:
-                menu_item = {}
-                for key, value in matching_menu.items():
-                    if key != tipo.lower() and value:
-                        menu_item[key] = value
-
-                return menu_item
-
-            return None
+        
 
     def get_menu(self):
         """
@@ -47,59 +31,84 @@ class MenuDatabaseController:
         Returns:
             str: A JSON string representing the entire menu.
         """
-        with open(self.file_path, 'r') as file:
-            menu_data = json.load(file)
-
-            if menu_data:
-                return menu_data
-
-            return None
-
-    def search_single(self, comida1, tipo1, request, comida2=None, tipo2=None):
+        conn = pyodbc.connect(self.conn_str)
+        
+        cursor = conn.cursor()
+        sql_query = """
+            SELECT 
+                P.nombre AS Nombre_Platillo,
+                P.descripcion AS Descripcion_Platillo,
+                R.set_rec AS Set_Recomendado,
+                T.tipo AS Tipo_Platillo
+            FROM 
+                Recomendaciones R
+            INNER JOIN 
+                Platillos P ON R.id_platillo = P.id
+            INNER JOIN 
+                Tipo_Platillos T ON P.tipo_id = T.id;
         """
-        Searches for a single menu item based on provided parameters.
+        cursor.execute(sql_query)
+        menu = cursor.fetchall()
 
-        Parameters:
-            comida1 (str): The first food item to search for.
-            tipo1 (str): The type of the first food item.
-            request (str): The type of request.
-            comida2 (str, optional): The second food item to search for.
-            tipo2 (str, optional): The type of the second food item.
+        sets_quant_ref = len(menu)/2
+        sets_quant = sets_quant_ref
+        
+        menu_set = []
+        menu_set_current = []
+        
+        for platillo in menu:
+            
+            menu_set_current += [platillo]
+            sets_quant -= 1
+            if sets_quant == 0:
+                sets_quant = sets_quant_ref
+                menu_set += [menu_set_current]
+                menu_set_current = []
+            
 
-        Returns:
-            str: A JSON string representing the retrieved menu item.
-        """
-        with open(self.file_path, 'r') as file:
-            menu_data = json.load(file)
+        # Lista para almacenar cada set como un objeto JSON
+        result_sets = []
+        
+        for set_platillos in menu_set:
+            # Diccionario para almacenar los platillos de cada tipo
+            set_info = {
+                'dish': None,
+                'drink': None,
+                'dessert': None
+            }
 
-            matching_menu = None
-            set_exists = True
+            # Iterar sobre cada tupla en el set de platillos
+            for platillo in set_platillos:
+                name, description, set_rec, tipo = platillo
+                if tipo == 'dish':
+                    set_info['dish'] = {
+                        'name': name,
+                        'description': description
+                    }
+                elif tipo == 'drink':
+                    set_info['drink'] = {
+                        'name': name,
+                        'description': description
+                    }
+                elif tipo == 'dessert':
+                    set_info['dessert'] = {
+                        'name': name,
+                        'description': description
+                    }
+            
+            # Agregar el set de platillos al resultado
+            result_sets.append(set_info)
 
-            if not (comida2 and tipo2):  # If only one parameter is provided
-                matching_menu = next((menu for menu in menu_data if menu.get(tipo1.lower()) == comida1), None)
-            else:  # If two parameters are provided
-                if tipo2:
-                    tipo1, tipo2 = tipo1.lower(), tipo2.lower()
+        # Convertir la lista de sets en formato JSON
+        json_data = result_sets
 
-                possible_queries = [(tipo1, tipo2), (tipo2, tipo1)]
+        # Imprimir el JSON generado
+        #print(json_data)
+        
+        cursor.close()
+        conn.close()
 
-                for t1, t2 in possible_queries:
-                    matching_menu = next((menu for menu in menu_data if menu.get(t1) == comida1 and menu.get(t2) == comida2), None)
-                    if matching_menu:
-                        break
+        return json_data
+        
 
-                if not matching_menu:
-                    set_exists = False
 
-            response = None
-
-            if matching_menu and set_exists:
-                response = matching_menu.get(request.lower())
-
-            if not response and set_exists:
-                return None
-
-            if not set_exists:
-                return "515"
-
-            return {"response": response}
