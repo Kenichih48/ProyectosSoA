@@ -1,4 +1,4 @@
-from ReservationDatabaseControllerMod import ReservationDatabaseController
+from UsuariosDatabaseControllerMod import UsuariosDatabaseController
 from AnswerGeneratorMod import AnswerGenerator
 import json
 
@@ -7,23 +7,28 @@ class AnswerAdapter:
 
     def __init__(self):
 
-        self.resDatabaseController = ReservationDatabaseController()
+        self.userDatabaseController = UsuariosDatabaseController()
         self.answerGenerator = AnswerGenerator()
 
-    def retrieve_get_res(self):
+    def retrieve_get_id(self, id_u):
 
+        userJson = self.answerGenerator.generate_success_response(200, self.userDatabaseController.get_id(id_u))
 
-        reservationJson = self.answerGenerator.generate_success_response(200, self.resDatabaseController.get_current_state())
+        return userJson
 
-        return reservationJson
+    def retrieve_add_user(self, pw, email, name, lname, direct, access):
+        idSend = self.userDatabaseController.insert_user(pw, email, name, lname, direct, access)
+        userJson = self.answerGenerator.generate_success_response(200, idSend)
+        return userJson
 
-    def retrieve_add_res(self, date, time, state):
-        self.resDatabaseController.insert_reservation(date, time, state)
-        reservationJson = self.answerGenerator.generate_success_response(200, "")
-        return reservationJson
+    def retrieve_login(self, pw, email):
 
-    def retrieve_edit_res(self, id_r, date, time, state):
+        idSend = self.userDatabaseController.login(pw, email)
+        userJson = self.answerGenerator.generate_success_response(200, idSend)
+        return userJson
+    
+    def retrieve_update_password(self, id_u, pw):
 
-        self.resDatabaseController.edit_reservation(id_r, date, time, state)
-        reservationJson = self.answerGenerator.generate_success_response(200, "")
-        return reservationJson
+        self.userDatabaseController.update_password(id_u, pw)
+        userJson = self.answerGenerator.generate_success_response(200, "")
+        return userJson

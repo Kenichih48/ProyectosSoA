@@ -6,7 +6,7 @@ import functions_framework
 
 @functions_framework.http
 
-#@app.route('/get_reservation', methods=['GET'])
+#@app.route('/getUserId', methods=['GET'])
 def get_user_id(request):
     controller = UserRequestController()
     data = request.args
@@ -20,26 +20,26 @@ def get_user_id(request):
 
 
 @functions_framework.http
-
-#@app.route('/add_reservation', methods=['POST'])
+#@app.route('/addUser', methods=['POST'])
 def add_user(request):
     controller = UserRequestController()
 
     data = request.get_json(silent=True)
     
-    pw = data['pasword']
-    email = data['email']
-    name = data['name']
-    lname = data['lastname']
-    direct = data['direction']
-    access = data['access']
+    pw = data['contrasena']
+    email = data['correo']
+    name = data['nombre']
+    lname = data['apellido']
+    direct = data['direccion']
+    access = data['nivel_acceso']
 
 
     response = controller.add_user(pw, email, name, lname, direct, access)
     return response
 
 @functions_framework.http
-#@app.route('/edit_reservation', methods=['POST'])
+
+#@app.route('/login', methods=['POST'])
 def login(request):
     controller = UserRequestController()
 
@@ -47,8 +47,8 @@ def login(request):
 
     data = request.get_json(silent=True)
     
-    pw = data['pasword']
-    email = data['email']
+    pw = data['contrasena']
+    email = data['correo']
 
     
     response = controller.login(pw, email)
@@ -56,14 +56,15 @@ def login(request):
 
 
 @functions_framework.http
-def update_password():
+#@app.route('/updatePassword', methods=['POST'])
+def update_password(request):
     controller = UserRequestController()
     data = request.get_json(silent=True)
 
     id_u = data['id']
-    password = data['pasword']
+    password = data['contrasena']
 
-    response = controller.retrieve_update_password(id_u, pw)
+    response = controller.update_password(id_u, password)
     return response
 
 

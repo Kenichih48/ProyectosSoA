@@ -2,7 +2,7 @@
 from AnswerAdapterMod import AnswerAdapter
 from AnswerGeneratorMod import AnswerGenerator
 
-#from UserRequestController import UserRequestController
+#from ReservationDatabaseControllerMod import ReservationDatabaseController
 #app = Flask(__name__)
 
 class UserRequestController:

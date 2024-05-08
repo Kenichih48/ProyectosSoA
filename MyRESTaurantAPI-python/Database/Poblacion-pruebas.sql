@@ -48,7 +48,7 @@ INSERT INTO Recomendaciones (id_platillo, set_rec) VALUES
 
 
 -- Poblar la tabla Usuario
-INSERT INTO Usuario (contraseña, correo, nombre, apellido, direccion, nivel_acceso) VALUES
+INSERT INTO Usuario (contrasena, correo, nombre, apellido, direccion, nivel_acceso) VALUES
 ('clave123', 'usuario1@example.com', 'Juan', 'Pérez', 'Calle Principal #123', 1),
 ('contraseña456', 'usuario2@example.com', 'María', 'García', 'Avenida Central #456', 0),
 ('password789', 'usuario3@example.com', 'Pedro', 'López', 'Calle Secundaria #789', 0);
@@ -59,4 +59,5 @@ INSERT INTO Reservaciones (hora, fecha, estado) VALUES
 ('18:00:00', '2024-05-05', 0),
 ('19:30:00', '2024-05-10', 0),
 ('20:00:00', '2024-05-15', 1);
+
 
