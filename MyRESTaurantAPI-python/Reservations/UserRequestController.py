@@ -24,14 +24,19 @@ class UserRequestController:
         
         return response
 
-    def add_reservation(self, date, time, state):
+    def add_reservation(self, date, time, state, people_quant, id_user):
 
-        response = self.answer_adapter.retrieve_add_res(date, time, state)
+        response = self.answer_adapter.retrieve_add_res(date, time, state, people_quant, id_user)
         return response
 
-    def edit_reservation(self, id_r, date, time, state):
+    def edit_reservation(self, id_r, state, people_quant, id_user):
 
-        response = self.answer_adapter.retrieve_edit_res(id_r, date, time, state)
+        response = self.answer_adapter.retrieve_edit_res(id_r, state, people_quant, id_user)
+        return response
+
+    def get_user_reservation(self, id_user):
+
+        response = self.answer_adapter.retrieve_get_user(id_user)
         return response
 
 

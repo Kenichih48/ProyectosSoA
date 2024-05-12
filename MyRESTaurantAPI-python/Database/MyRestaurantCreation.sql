@@ -21,7 +21,10 @@ CREATE TABLE Reservaciones (
     id INT IDENTITY(1,1) PRIMARY KEY,
     hora TIME NOT NULL,
     fecha DATE NOT NULL,
-	estado BIT NOT NULL
+	estado BIT NOT NULL,
+	people_quant INT,
+	id_usuario INT,
+	FOREIGN KEY (id_usuario) REFERENCES Usuario(id)
 );
 
 

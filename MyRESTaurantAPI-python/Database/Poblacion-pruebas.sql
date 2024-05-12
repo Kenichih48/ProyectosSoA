@@ -55,9 +55,9 @@ INSERT INTO Usuario (contrasena, correo, nombre, apellido, direccion, nivel_acce
 
 
 -- Poblar la tabla Reservaciones
-INSERT INTO Reservaciones (hora, fecha, estado) VALUES
-('18:00:00', '2024-05-05', 0),
-('19:30:00', '2024-05-10', 0),
-('20:00:00', '2024-05-15', 1);
+INSERT INTO Reservaciones (hora, fecha, estado, people_quant, id_usuario) VALUES
+('18:00:00', '2024-05-05', 1, 2, 1),
+('19:30:00', '2024-05-10', 0, 0,NULL),
+('20:00:00', '2024-05-15', 0, 0, NULL);
 
 
