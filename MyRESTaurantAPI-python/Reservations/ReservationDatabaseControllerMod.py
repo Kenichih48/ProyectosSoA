@@ -10,6 +10,7 @@ class ReservationDatabaseController:
         username = 'INTEL'  # Nombre de usuario
         password = ''  # Contraseña
 
+
         self.conn_str = f'DRIVER={{SQL Server}};SERVER={server};DATABASE={database};UID={username};PWD={password};Trusted_Connection=yes;'
 
         
