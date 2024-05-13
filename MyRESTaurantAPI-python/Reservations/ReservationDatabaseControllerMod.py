@@ -117,9 +117,7 @@ class ReservationDatabaseController:
 
         with self.conn:
             with self.conn.cursor() as cursor:
-                conn = pyodbc.connect(self.conn_str)
-                cursor = conn.cursor()
-                
+            
                 sql_query = "SELECT * FROM Reservaciones WHERE id_usuario = ?"
                 cursor.execute(sql_query, id_user)
                 reservations = cursor.fetchall()
