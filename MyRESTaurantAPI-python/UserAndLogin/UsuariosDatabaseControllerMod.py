@@ -81,7 +81,7 @@ class UsuariosDatabaseController:
         try:
             with self.conn:
                 with self.conn.cursor() as cursor:
-                    sql_query = "UPDATE Usuario SET contrasena = %s WHERE id = %s"
+                    sql_query = "UPDATE Usuario SET contrasena = %s WHERE correo = %s"
                     encrypted_pw = self.encrypt_password(pw)
                     cursor.execute(sql_query, (encrypted_pw, id_u))
                     self.conn.commit()
