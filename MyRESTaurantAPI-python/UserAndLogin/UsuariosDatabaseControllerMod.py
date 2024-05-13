@@ -22,7 +22,7 @@ class UsuariosDatabaseController:
 
     def get_id(self, id_u):
         try:
-             with self.conn:
+            with self.conn:
                 with self.conn.cursor() as cursor:
                     sql_query = "SELECT * FROM Usuario WHERE id = %s"
                     cursor.execute(sql_query, (id_u,))

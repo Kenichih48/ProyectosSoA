@@ -77,7 +77,7 @@ class ReservationDatabaseController:
                     cursor.execute(sql_query, (time, date, self.set_state(state), people_quant, id_user))
                     self.conn.commit()  # Confirmar la transacción
                     print("Reserva insertada exitosamente.")
-                except pyodbc.Error as e:
+                except Exception as e:
                     self.conn.rollback()  # Revertir la transacción si hay un error
                     print(f"Error al insertar la reserva: {e}")
 
@@ -105,7 +105,7 @@ class ReservationDatabaseController:
                     cursor.execute(sql_query, (self.set_state(state), people_quant, id_user, reservation_id))
                     self.conn.commit()  # Confirmar la transacción
                     print(f"Reserva con ID {reservation_id} actualizada exitosamente.")
-                except pyodbc.Error as e:
+                except Exception as e:
                     self.conn.rollback()  # Revertir la transacción si hay un error
                     print(f"Error al actualizar la reserva: {e}")
 
@@ -117,9 +117,7 @@ class ReservationDatabaseController:
 
         with self.conn:
             with self.conn.cursor() as cursor:
-                conn = pyodbc.connect(self.conn_str)
-                cursor = conn.cursor()
-                
+            
                 sql_query = "SELECT * FROM Reservaciones WHERE id_usuario = ?"
                 cursor.execute(sql_query, id_user)
                 reservations = cursor.fetchall()
